@@ -12,6 +12,7 @@ public class WorldManager : Singleton<WorldManager>
     {
         PlaceProps();
         PlaceEnemies();
+        PlaceShipPieces();
     }
 
     public void PlaceProps()
@@ -47,6 +48,20 @@ public class WorldManager : Singleton<WorldManager>
         }
     }
 
+    private void PlaceShipPieces()
+    {
+        var enemies = GetShiPieces();
+
+        for (int i = 0; i < 4; i += 1)
+        {
+            var chosenResource = GetResourceFromShipPieceWeights();
+            var resourceToBeSpawned = enemies.FirstOrDefault(x => x.name == chosenResource);
+            var spawnPoint = new Vector3(Random.Range(-(Width / 2), Width / 2), 0, Random.Range(-(Height / 2), Height / 2));
+
+            Instantiate(resourceToBeSpawned, spawnPoint, Quaternion.identity);
+        }
+    }
+
     private GameObject[] GetProps()
     {
         return Resources.LoadAll<GameObject>("Props");
@@ -57,44 +72,30 @@ public class WorldManager : Singleton<WorldManager>
         return Resources.LoadAll<GameObject>("Enemies");
     }
 
+    private GameObject[] GetShiPieces()
+    {
+        return Resources.LoadAll<GameObject>("Ship Pieces");
+    }
+
     private string GetResourceFromWeights()
     {
         var weights = GetWeights();
-        var total = weights.Sum(x => x.Value);
-        var target = Random.Range(0f, total);
-        var current = 0f;
 
-        foreach (var weight in weights)
-        {
-            current += weight.Value;
-
-            if (current >= target)
-            {
-                return weight.Key;
-            }
-        }
-
-        return null;
+        return GetGONameFromWeights(weights);
     }
 
     private string GetResourceFromEnemyWeights()
     {
         var weights = GetEnemyWeights();
-        var total = weights.Sum(x => x.Value);
-        var target = Random.Range(0f, total);
-        var current = 0f;
 
-        foreach (var weight in weights)
-        {
-            current += weight.Value;
+        return GetGONameFromWeights(weights);
+    }
 
-            if (current >= target)
-            {
-                return weight.Key;
-            }
-        }
+    private string GetResourceFromShipPieceWeights()
+    {
+        var weights = GetShipPieceWeights();
 
-        return null;
+        return GetGONameFromWeights(weights);
     }
 
     private Dictionary<string, float> GetWeights()
@@ -114,5 +115,32 @@ public class WorldManager : Singleton<WorldManager>
         {
             { "Caveman", 100f }
         };
+    }
+
+    private Dictionary<string, float> GetShipPieceWeights()
+    {
+        return new Dictionary<string, float>()
+        {
+            { "Ship Piece", 100f }
+        };
+    }
+
+    private string GetGONameFromWeights(Dictionary<string, float> weights)
+    {
+        var total = weights.Sum(x => x.Value);
+        var target = Random.Range(0f, total);
+        var current = 0f;
+
+        foreach (var weight in weights)
+        {
+            current += weight.Value;
+
+            if (current >= target)
+            {
+                return weight.Key;
+            }
+        }
+
+        return null;
     }
 }
