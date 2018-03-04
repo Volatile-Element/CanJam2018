@@ -99,7 +99,7 @@ public class WorldManager : Singleton<WorldManager>
     {
         var enemies = GetShiPieces();
 
-        for (int i = 0; i < GameManager.Instance.ShipPiecesToCollect; i += 1)
+        for (int i = 0; i < 10; i += 1)
         {
             var chosenResource = GetResourceFromShipPieceWeights();
             var resourceToBeSpawned = enemies.FirstOrDefault(x => x.name == chosenResource.ResourceName);
@@ -196,7 +196,7 @@ public class WorldManager : Singleton<WorldManager>
             new ResourceItem() { ResourceName = "Bush", Weight = 50f, MinScale = 0.5f, MaxScale = 1.2f, MinRotation = Vector3.zero, MaxRotation = new Vector3(0, 360, 0) },
             new ResourceItem() { ResourceName = "Tree", Weight = 50f, MinScale = 0.6f, MaxScale = 1.2f, MinRotation = Vector3.zero, MaxRotation = new Vector3(0, 360, 0) },
             new ResourceItem() { ResourceName = "Rock", Weight = 10f, MinScale = 0.5f, MaxScale = 1.2f, MinRotation = Vector3.zero, MaxRotation = new Vector3(360, 360, 360) },
-            new ResourceItem() { ResourceName = "Fire", Weight = 10f, MinScale = 0.9f, MaxScale = 1.1f, MinRotation = Vector3.zero, MaxRotation = new Vector3(0, 360, 0) }
+            new ResourceItem() { ResourceName = "Fire", Weight = 1f, MinScale = 0.9f, MaxScale = 1.1f, MinRotation = Vector3.zero, MaxRotation = new Vector3(0, 360, 0) }
         };
     }
 
@@ -221,7 +221,7 @@ public class WorldManager : Singleton<WorldManager>
     {
         return new ResourceItem[]
         {
-            new ResourceItem() { ResourceName = "Ship Piece", Weight = 100f }
+            new ResourceItem() { ResourceName = "Ship Piece", Weight = 100f, MinRotation = Vector3.zero, MaxRotation = new Vector3(360, 360, 360) }
         };
     }
 

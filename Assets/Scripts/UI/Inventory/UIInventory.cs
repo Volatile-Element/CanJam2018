@@ -10,7 +10,7 @@ public class UIInventory : MonoBehaviour
         PlayerInventory.Instance.OnInvetoryItemAdded.AddListener(OnInventoryChanged);
         PlayerInventory.Instance.OnInvetoryItemRemoved.AddListener(OnInventoryChanged);
 
-        UITool.Get<Text>(transform, "txtTemplate").enabled = false;
+        UITool.Get<Text>(transform, "txtRemaining").text = $"Chronoium Remaining: {GameManager.Instance.ShipPiecesToCollect}";
     }
     
     private void GenerateList()
@@ -30,6 +30,9 @@ public class UIInventory : MonoBehaviour
 
     public void OnInventoryChanged(string item)
     {
-        GenerateList();
+        var remaining = Mathf.Max(GameManager.Instance.ShipPiecesToCollect - PlayerInventory.Instance.GetInventoryItems().Count, 0);
+
+        UITool.Get<Text>(transform, "txtRemaining").text = $"Chronoium Remaining: {remaining}";
+        UITool.Get<Text>(transform, "txtCollected").text = $"Chronoium Collected: {PlayerInventory.Instance.GetInventoryItems().Count}";
     }
 }
