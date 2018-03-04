@@ -20,7 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4884148355094586}
   - component: {fileID: 108606736988750510}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -41,7 +41,7 @@ GameObject:
   - component: {fileID: 114979250980327644}
   - component: {fileID: 114752648207953040}
   - component: {fileID: 54271691064289096}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Time Bubble Fast
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -9,7 +9,14 @@ public class UIInformation : Singleton<UIInformation>
 
     private bool currentlyDisplayingInformation;
 
-	public void AddMessageToDisplay(string message)
+    private Animator animator;
+
+    private void Awake()
+    {
+        animator = GetComponent<Animator>();
+    }
+
+    public void AddMessageToDisplay(string message)
     {
         messagesToDisplay.Add(message);
 
@@ -35,5 +42,17 @@ public class UIInformation : Singleton<UIInformation>
         {
             currentlyDisplayingInformation = false;
         }
+    }
+
+    public void FadeIn(string message)
+    {
+        UITool.Get<Text>(transform, "txtInformation").text = message;
+
+        animator.SetTrigger("Fade In");
+    }
+
+    public void FadeOut()
+    {
+        animator.SetTrigger("Fade Out");
     }
 }

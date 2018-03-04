@@ -26,6 +26,7 @@ GameObject:
   - component: {fileID: 65826271295584308}
   - component: {fileID: 114866167994002656}
   - component: {fileID: 114178386088875428}
+  - component: {fileID: 95125636001327852}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -229,6 +230,23 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 0
+--- !u!95 &95125636001327852
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1209232145991478}
+  m_Enabled: 0
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 3cc6484f1d99b1141a489588b7414ab1, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
 --- !u!114 &114178386088875428
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -240,6 +258,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5480aadf5ea811d48a7cff28fbb08970, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  OnTimeNormal:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
   StartWalkSpeed: 5
   StartRunSpeed: 10
   SlowWalkSpeed: 1

@@ -6,14 +6,21 @@ using UnityEngine.AI;
 
 public class WorldManager : Singleton<WorldManager>
 {
-    public float Width = 100;
-    public float Height = 100;
+    public float Width = 300;
+    public float Height = 300;
 
     public Vector3 DeadZoneStart = new Vector3(40, 0, 40);
     public Vector3 DeadZoneEnd = new Vector3(60, 0, 60);
 
+    public GameObject Props;
+
+    private const int ENEMIES_TO_SPAWN = 20;
+    private const int BUBBLES_TO_SPAWN = 20;
+
     private void Awake()
     {
+        Props = new GameObject("Props Container");
+
         PlaceProps();
         PlaceEnemies();
         PlaceShipPieces();
@@ -52,7 +59,7 @@ public class WorldManager : Singleton<WorldManager>
     {
         var resources = GetTimeBubbles();
 
-        for (int i = 0; i < 10; i += 1)
+        for (int i = 0; i < BUBBLES_TO_SPAWN; i += 1)
         {
             var chosenResource = GetResourceFromTimeBubbleWeights();
             var resource = resources.FirstOrDefault(x => x.name == chosenResource.ResourceName);
@@ -72,7 +79,7 @@ public class WorldManager : Singleton<WorldManager>
     {
         var enemies = GetEnemies();
         
-        for (int i = 0; i < 10; i += 1)
+        for (int i = 0; i < ENEMIES_TO_SPAWN; i += 1)
         {
             var chosenEnemy = GetResourceFromEnemyWeights();
             var enemy = enemies.FirstOrDefault(x => x.name == chosenEnemy.ResourceName);
@@ -113,6 +120,8 @@ public class WorldManager : Singleton<WorldManager>
         var newResource = Instantiate(resource, location, Quaternion.identity);
         newResource.transform.localScale = Vector3.one * Random.Range(resourceItem.MinScale, resourceItem.MaxScale);
         newResource.transform.rotation = Quaternion.Euler(GetRandomPointBetweenTwoVectors(resourceItem.MinRotation, resourceItem.MaxRotation));
+
+        newResource.transform.parent = Props.transform;
     }
 
     private Vector3 GetRandomPointBetweenTwoVectors(Vector3 min, Vector3 max)
@@ -233,6 +242,11 @@ public class WorldManager : Singleton<WorldManager>
         }
 
         return null;
+    }
+
+    public Vector3 GetRandomPointInWorld()
+    {
+        return new Vector3(Random.Range(-(Width / 2), (Width / 2)), 0, Random.Range(-(Height / 2), (Height / 2)));
     }
 }
 
