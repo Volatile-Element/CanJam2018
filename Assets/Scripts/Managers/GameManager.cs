@@ -12,6 +12,8 @@ public class GameManager : Singleton<GameManager>
     private void Awake()
     {
         TimeManager.Instance.OnTimeChanged.AddListener(OnTimeChanged);
+
+        SoundManager.Instance.PlayLoop("Sounds/Background Music");
     }
 
     public void OnTimeChanged(int seconds)
