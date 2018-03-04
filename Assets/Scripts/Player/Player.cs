@@ -25,10 +25,10 @@ public class Player : Singleton<Player>
         GetComponent<Animator>().enabled = true;
         GetComponent<Animator>().SetTrigger("Clobbered");
 
-        DoActionIn.Create(() => { UIFade.Instance.FadeToBlack(); }, 1.45f);
+        DoActionIn.Create(() => { UIFade.Instance.FadeToBlack(); UIInformation.Instance.AddMessageToDisplay("Clobbered!"); }, 1.45f);
         DoActionIn.Create(() =>
         {
-            transform.position = WorldManager.Instance.GetRandomPointInWorld();
+            transform.position = WorldManager.Instance.GetRandomPointInWorld() + new Vector3(0, 1, 0);
 
             FindObjectOfType<FirstPersonController>().enabled = true;
             GetComponent<Animator>().enabled = false;
@@ -36,7 +36,7 @@ public class Player : Singleton<Player>
             TimeManager.Instance.SecondsRemaining -= 30;
 
             UIFade.Instance.FadeToClear();
-
+            
             clobbering = false;
         }, 3f);
     }

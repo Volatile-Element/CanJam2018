@@ -30,18 +30,21 @@ public class UIInformation : Singleton<UIInformation>
     {
         currentlyDisplayingInformation = true;
 
-        UITool.Get<Text>(transform, "txtInformation").text = messagesToDisplay[0];
-
-        messagesToDisplay.RemoveAt(0);
-
-        if (messagesToDisplay.Count > 0)
+        DoActionIn.Create(() => { FadeIn(messagesToDisplay[0]); }, 0f);
+        DoActionIn.Create(() => { FadeOut(); }, 2f);
+        DoActionIn.Create(() =>
         {
-            DisplayNextMessage();
-        }
-        else
-        {
-            currentlyDisplayingInformation = false;
-        }
+            messagesToDisplay.RemoveAt(0);
+
+            if (messagesToDisplay.Count > 0)
+            {
+                DisplayNextMessage();
+            }
+            else
+            {
+                currentlyDisplayingInformation = false;
+            }
+        }, 4f);
     }
 
     public void FadeIn(string message)
