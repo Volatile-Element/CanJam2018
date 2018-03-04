@@ -21,9 +21,14 @@ public class Caveman : MonoBehaviour
     {
         navMeshAgent = GetComponent<NavMeshAgent>();
     }
-    
-	// Update is called once per frame
-	void Update ()
+
+    private void Start()
+    {
+        PlanAGrunt();
+    }
+
+    // Update is called once per frame
+    void Update ()
     {
         CheckIfPlayerInRange();
 
@@ -81,6 +86,16 @@ public class Caveman : MonoBehaviour
         destination = GetRandomPointInWorld();
 
         StartMoving(destination);
+    }
+
+    private void PlanAGrunt()
+    {
+        DoActionIn.Create(() =>
+        {
+            SoundManager.Instance.PlaySingleFireRandom("Sounds/Grunts", 1, 0.5f, true);
+
+            PlanAGrunt();
+        }, Random.Range(5f, 20f));
     }
 
     private void CheckIfPlayerInRange()
