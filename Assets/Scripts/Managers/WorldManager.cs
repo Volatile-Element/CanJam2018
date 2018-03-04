@@ -15,11 +15,13 @@ public class WorldManager : Singleton<WorldManager>
     private void Awake()
     {
         PlaceProps();
-        PlaceTimeBubbles();
         PlaceEnemies();
         PlaceShipPieces();
 
         FindObjectOfType<NavMeshSurface>().BuildNavMesh();
+
+        //We do this here so they aren't included in the navmesh. #GameJamHacks
+        PlaceTimeBubbles();
     }
 
     public void PlaceProps()
@@ -38,9 +40,9 @@ public class WorldManager : Singleton<WorldManager>
                 if (Random.Range(0, 10) > 8)
                 {
                     var chosenProp = GetResourceFromWeights();
-                    var prop = props.FirstOrDefault(x => x.name == chosenProp);
-
-                    Instantiate(prop, new Vector3(h, 0, w), Quaternion.identity);
+                    var prop = props.FirstOrDefault(x => x.name == chosenProp.ResourceName);
+                    
+                    SpawnResourceItem(prop, chosenProp, new Vector3(h, 0, w));
                 }
             }
         }
@@ -53,7 +55,7 @@ public class WorldManager : Singleton<WorldManager>
         for (int i = 0; i < 10; i += 1)
         {
             var chosenResource = GetResourceFromTimeBubbleWeights();
-            var resource = resources.FirstOrDefault(x => x.name == chosenResource);
+            var resource = resources.FirstOrDefault(x => x.name == chosenResource.ResourceName);
             var spawnPoint = new Vector3(Random.Range(-(Width / 2), Width / 2), 0, Random.Range(-(Height / 2), Height / 2));
 
             if (IsInDeadZone(spawnPoint.x, spawnPoint.y))
@@ -62,7 +64,7 @@ public class WorldManager : Singleton<WorldManager>
                 continue;
             }
 
-            Instantiate(resource, spawnPoint, Quaternion.identity);
+            SpawnResourceItem(resource, chosenResource, spawnPoint);
         }
     }
 
@@ -73,7 +75,7 @@ public class WorldManager : Singleton<WorldManager>
         for (int i = 0; i < 10; i += 1)
         {
             var chosenEnemy = GetResourceFromEnemyWeights();
-            var enemy = enemies.FirstOrDefault(x => x.name == chosenEnemy);
+            var enemy = enemies.FirstOrDefault(x => x.name == chosenEnemy.ResourceName);
             var spawnPoint = new Vector3(Random.Range(-(Width / 2), Width / 2), 0, Random.Range(-(Height / 2), Height / 2));
 
             if (IsInDeadZone(spawnPoint.x, spawnPoint.y))
@@ -82,7 +84,7 @@ public class WorldManager : Singleton<WorldManager>
                 continue;
             }
 
-            Instantiate(enemy, spawnPoint, Quaternion.identity);
+            SpawnResourceItem(enemy, chosenEnemy, spawnPoint);
         }
     }
 
@@ -93,7 +95,7 @@ public class WorldManager : Singleton<WorldManager>
         for (int i = 0; i < GameManager.Instance.ShipPiecesToCollect; i += 1)
         {
             var chosenResource = GetResourceFromShipPieceWeights();
-            var resourceToBeSpawned = enemies.FirstOrDefault(x => x.name == chosenResource);
+            var resourceToBeSpawned = enemies.FirstOrDefault(x => x.name == chosenResource.ResourceName);
             var spawnPoint = new Vector3(Random.Range(-(Width / 2), Width / 2), 0, Random.Range(-(Height / 2), Height / 2));
 
             if (IsInDeadZone(spawnPoint.x, spawnPoint.y))
@@ -102,8 +104,20 @@ public class WorldManager : Singleton<WorldManager>
                 continue;
             }
 
-            Instantiate(resourceToBeSpawned, spawnPoint, Quaternion.identity);
+            SpawnResourceItem(resourceToBeSpawned, chosenResource, spawnPoint);
         }
+    }
+
+    private void SpawnResourceItem(GameObject resource, ResourceItem resourceItem, Vector3 location)
+    {
+        var newResource = Instantiate(resource, location, Quaternion.identity);
+        newResource.transform.localScale = Vector3.one * Random.Range(resourceItem.MinScale, resourceItem.MaxScale);
+        newResource.transform.rotation = Quaternion.Euler(GetRandomPointBetweenTwoVectors(resourceItem.MinRotation, resourceItem.MaxRotation));
+    }
+
+    private Vector3 GetRandomPointBetweenTwoVectors(Vector3 min, Vector3 max)
+    {
+        return new Vector3(Random.Range(min.x, max.x), Random.Range(min.y, max.y), Random.Range(min.z, max.z));
     }
 
     private bool IsInDeadZone(float x, float z)
@@ -138,86 +152,99 @@ public class WorldManager : Singleton<WorldManager>
         return Resources.LoadAll<GameObject>("Ship Pieces");
     }
 
-    private string GetResourceFromWeights()
+    private ResourceItem GetResourceFromWeights()
     {
         var weights = GetWeights();
 
-        return GetGONameFromWeights(weights);
+        return GetResourceItemFromWeights(weights);
     }
     
-    private string GetResourceFromTimeBubbleWeights()
+    private ResourceItem GetResourceFromTimeBubbleWeights()
     {
         var weights = GetTimeBubbleWeights();
 
-        return GetGONameFromWeights(weights);
+        return GetResourceItemFromWeights(weights);
     }
 
-    private string GetResourceFromEnemyWeights()
+    private ResourceItem GetResourceFromEnemyWeights()
     {
         var weights = GetEnemyWeights();
 
-        return GetGONameFromWeights(weights);
+        return GetResourceItemFromWeights(weights);
     }
 
-    private string GetResourceFromShipPieceWeights()
+    private ResourceItem GetResourceFromShipPieceWeights()
     {
         var weights = GetShipPieceWeights();
 
-        return GetGONameFromWeights(weights);
+        return GetResourceItemFromWeights(weights);
     }
 
-    private Dictionary<string, float> GetWeights()
+    private ResourceItem[] GetWeights()
     {
-        return new Dictionary<string, float>()
+        return new ResourceItem[]
         {
-            { "Bush", 50f },
-            { "Tree", 50f },
-            { "Rock", 10f },
-            { "Fire", 10f }
+            new ResourceItem() { ResourceName = "Bush", Weight = 50f, MinScale = 0.5f, MaxScale = 1.2f, MinRotation = Vector3.zero, MaxRotation = new Vector3(0, 360, 0) },
+            new ResourceItem() { ResourceName = "Tree", Weight = 50f, MinScale = 0.6f, MaxScale = 1.2f, MinRotation = Vector3.zero, MaxRotation = new Vector3(0, 360, 0) },
+            new ResourceItem() { ResourceName = "Rock", Weight = 10f, MinScale = 0.5f, MaxScale = 1.2f, MinRotation = Vector3.zero, MaxRotation = new Vector3(360, 360, 360) },
+            new ResourceItem() { ResourceName = "Fire", Weight = 10f, MinScale = 0.9f, MaxScale = 1.1f, MinRotation = Vector3.zero, MaxRotation = new Vector3(0, 360, 0) }
         };
     }
 
-    private Dictionary<string, float> GetTimeBubbleWeights()
+    private ResourceItem[] GetTimeBubbleWeights()
     {
-        return new Dictionary<string, float>()
+        return new []
         {
-            { "Time Bubble Fast", 50f },
-            { "Time Bubble Slow", 50f }
+            new ResourceItem() { ResourceName = "Time Bubble Fast", Weight = 50f },
+            new ResourceItem() { ResourceName = "Time Bubble Slow", Weight = 50f }
         };
     }
 
-    private Dictionary<string, float> GetEnemyWeights()
+    private ResourceItem[] GetEnemyWeights()
     {
-        return new Dictionary<string, float>()
+        return new ResourceItem[]
         {
-            { "Caveman", 100f }
+            new ResourceItem() { ResourceName = "Caveman", Weight = 100f, MinScale = 0.9f, MaxScale = 1.1f }
         };
     }
 
-    private Dictionary<string, float> GetShipPieceWeights()
+    private ResourceItem[] GetShipPieceWeights()
     {
-        return new Dictionary<string, float>()
+        return new ResourceItem[]
         {
-            { "Ship Piece", 100f }
+            new ResourceItem() { ResourceName = "Ship Piece", Weight = 100f }
         };
     }
 
-    private string GetGONameFromWeights(Dictionary<string, float> weights)
+    private ResourceItem GetResourceItemFromWeights(ResourceItem[] resourceItems)
     {
-        var total = weights.Sum(x => x.Value);
+        var total = resourceItems.Sum(x => x.Weight);
         var target = Random.Range(0f, total);
         var current = 0f;
 
-        foreach (var weight in weights)
+        foreach (var resource in resourceItems)
         {
-            current += weight.Value;
+            current += resource.Weight;
 
             if (current >= target)
             {
-                return weight.Key;
+                return resource;
             }
         }
 
         return null;
     }
+}
+
+public class ResourceItem
+{
+    public string ResourceName = "";
+
+    public float Weight = 100f;
+
+    public float MinScale = 1f;
+    public float MaxScale = 1f;
+
+    public Vector3 MinRotation = Vector3.zero;
+    public Vector3 MaxRotation = Vector3.zero;
 }
