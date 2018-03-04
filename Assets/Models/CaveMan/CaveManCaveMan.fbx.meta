@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 2a733a58435f2a149a25329edcd62d69
-timeCreated: 1520128408
+guid: f4979854554550744b045378a99c71ad
+timeCreated: 1520132861
 ModelImporter:
   serializedVersion: 22
   fileIDToRecycleName:
@@ -201,8 +201,7 @@ ModelImporter:
     3300000: Club
     4300000: pCube1
     4300002: Club
-    7400000: Take 001
-    7400002: CaveMan
+    7400000: CaveMan
     9500000: //RootNode
     13700000: pCube1
   externalObjects: {}
