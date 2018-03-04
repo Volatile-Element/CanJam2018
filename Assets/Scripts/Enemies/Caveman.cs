@@ -30,7 +30,7 @@ public class Caveman : MonoBehaviour
         switch (state)
         {
             case CavemanState.Idle:
-                if (Random.Range(0, 1000) > 900)
+                if (Random.Range(0, 10000) > 9000)
                 {
                     Wander();
                 }
@@ -57,7 +57,7 @@ public class Caveman : MonoBehaviour
                 }
                 break;
             case CavemanState.ScanningForPlayer:
-                if (Random.Range(0, 1000) > 900)
+                if (Random.Range(0, 10000) > 9000)
                 {
                     Wander();
                 }
