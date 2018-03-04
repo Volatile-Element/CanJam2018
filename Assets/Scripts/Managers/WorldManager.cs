@@ -8,9 +8,13 @@ public class WorldManager : Singleton<WorldManager>
     public float Width = 100;
     public float Height = 100;
 
+    public Vector3 DeadZoneStart = new Vector3(40, 0, 40);
+    public Vector3 DeadZoneEnd = new Vector3(60, 0, 60);
+
     private void Awake()
     {
         PlaceProps();
+        PlaceTimeBubbles();
         PlaceEnemies();
         PlaceShipPieces();
     }
@@ -23,6 +27,11 @@ public class WorldManager : Singleton<WorldManager>
         {
             for (float h = -(Height / 2); h < Height / 2; h += Random.Range(0f, 5f))
             {
+                if (IsInDeadZone(w, h))
+                {
+                    continue;
+                }
+
                 if (Random.Range(0, 10) > 7)
                 {
                     var chosenProp = GetResourceFromWeights();
@@ -31,6 +40,26 @@ public class WorldManager : Singleton<WorldManager>
                     Instantiate(prop, new Vector3(h, 0, w), Quaternion.identity);
                 }
             }
+        }
+    }
+
+    private void PlaceTimeBubbles()
+    {
+        var resources = GetTimeBubbles();
+
+        for (int i = 0; i < 10; i += 1)
+        {
+            var chosenResource = GetResourceFromTimeBubbleWeights();
+            var resource = resources.FirstOrDefault(x => x.name == chosenResource);
+            var spawnPoint = new Vector3(Random.Range(-(Width / 2), Width / 2), 0, Random.Range(-(Height / 2), Height / 2));
+
+            if (IsInDeadZone(spawnPoint.x, spawnPoint.y))
+            {
+                i--;
+                continue;
+            }
+
+            Instantiate(resource, spawnPoint, Quaternion.identity);
         }
     }
 
@@ -43,6 +72,12 @@ public class WorldManager : Singleton<WorldManager>
             var chosenEnemy = GetResourceFromEnemyWeights();
             var enemy = enemies.FirstOrDefault(x => x.name == chosenEnemy);
             var spawnPoint = new Vector3(Random.Range(-(Width / 2), Width / 2), 0, Random.Range(-(Height / 2), Height / 2));
+
+            if (IsInDeadZone(spawnPoint.x, spawnPoint.y))
+            {
+                i--;
+                continue;
+            }
 
             Instantiate(enemy, spawnPoint, Quaternion.identity);
         }
@@ -58,13 +93,36 @@ public class WorldManager : Singleton<WorldManager>
             var resourceToBeSpawned = enemies.FirstOrDefault(x => x.name == chosenResource);
             var spawnPoint = new Vector3(Random.Range(-(Width / 2), Width / 2), 0, Random.Range(-(Height / 2), Height / 2));
 
+            if (IsInDeadZone(spawnPoint.x, spawnPoint.y))
+            {
+                i--;
+                continue;
+            }
+
             Instantiate(resourceToBeSpawned, spawnPoint, Quaternion.identity);
         }
+    }
+
+    private bool IsInDeadZone(float x, float z)
+    {
+        var startX = -(DeadZoneStart.x / 2);
+        var startZ = -(DeadZoneStart.z / 2);
+        var endX = DeadZoneEnd.x;
+        var endZ = DeadZoneEnd.z;
+
+        var deadZone = new Rect(startX, startZ, endX, endZ);
+
+        return deadZone.Contains(new Vector2(x, z));
     }
 
     private GameObject[] GetProps()
     {
         return Resources.LoadAll<GameObject>("Props");
+    }
+    
+    private GameObject[] GetTimeBubbles()
+    {
+        return Resources.LoadAll<GameObject>("Time Bubbles");
     }
 
     private GameObject[] GetEnemies()
@@ -80,6 +138,13 @@ public class WorldManager : Singleton<WorldManager>
     private string GetResourceFromWeights()
     {
         var weights = GetWeights();
+
+        return GetGONameFromWeights(weights);
+    }
+    
+    private string GetResourceFromTimeBubbleWeights()
+    {
+        var weights = GetTimeBubbleWeights();
 
         return GetGONameFromWeights(weights);
     }
@@ -106,6 +171,15 @@ public class WorldManager : Singleton<WorldManager>
             { "Tree", 50f },
             { "Rock", 50f },
             { "Fire", 10f }
+        };
+    }
+
+    private Dictionary<string, float> GetTimeBubbleWeights()
+    {
+        return new Dictionary<string, float>()
+        {
+            { "Time Bubble Fast", 50f },
+            { "Time Bubble Slow", 50f }
         };
     }
 
