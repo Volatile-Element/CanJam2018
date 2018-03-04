@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class WorldManager : Singleton<WorldManager>
 {
@@ -17,6 +18,8 @@ public class WorldManager : Singleton<WorldManager>
         PlaceTimeBubbles();
         PlaceEnemies();
         PlaceShipPieces();
+
+        FindObjectOfType<NavMeshSurface>().BuildNavMesh();
     }
 
     public void PlaceProps()
@@ -32,7 +35,7 @@ public class WorldManager : Singleton<WorldManager>
                     continue;
                 }
 
-                if (Random.Range(0, 10) > 7)
+                if (Random.Range(0, 10) > 8)
                 {
                     var chosenProp = GetResourceFromWeights();
                     var prop = props.FirstOrDefault(x => x.name == chosenProp);
@@ -169,7 +172,7 @@ public class WorldManager : Singleton<WorldManager>
         {
             { "Bush", 50f },
             { "Tree", 50f },
-            { "Rock", 50f },
+            { "Rock", 10f },
             { "Fire", 10f }
         };
     }

@@ -480,6 +480,9 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4643396358350682}
+  - component: {fileID: 65760585362640548}
+  - component: {fileID: 114746904366510494}
+  - component: {fileID: 114793277613730562}
   m_Layer: 0
   m_Name: Ship
   m_TagString: Untagged
@@ -1755,3 +1758,38 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1965276956927496}
   m_Mesh: {fileID: 4300020, guid: 98d5728864d1f544bbcefde60d9b58b3, type: 3}
+--- !u!65 &65760585362640548
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1992383156767178}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 6, y: 6, z: 18}
+  m_Center: {x: 0, y: 1, z: 0}
+--- !u!114 &114746904366510494
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1992383156767178}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 742f43e622b21b549b54bb9f7960500e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _InteractionText: Press E to Add Ship Pieces
+--- !u!114 &114793277613730562
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1992383156767178}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13c60781755297746bdddb539669f73a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
