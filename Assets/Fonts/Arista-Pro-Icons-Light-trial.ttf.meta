@@ -1,0 +1,23 @@
+fileFormatVersion: 2
+guid: 1513c76e013f2d8459dcd7de5dfbca2f
+timeCreated: 1520147944
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Arista Pro Icons
+  fontNames:
+  - Arista Pro Icons
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 06decc45cf466fb418930d57f6497713, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

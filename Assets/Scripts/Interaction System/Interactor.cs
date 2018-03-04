@@ -26,7 +26,7 @@ public class Interactor : MonoBehaviour
     {
         Ray ray = camera.ViewportPointToRay(new Vector3(0.5F, 0.5F, 0));
         RaycastHit hit;
-        var result = Physics.Raycast(ray, out hit, 50f);
+        var result = Physics.Raycast(ray, out hit, 5f);
         if (!result)
         {
             interactableLookingAt = null;
