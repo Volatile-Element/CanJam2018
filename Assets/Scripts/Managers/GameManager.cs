@@ -5,6 +5,8 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : Singleton<GameManager>
 {
+    public int ShipPiecesToCollect = 3;
+
     private bool gameOver;
 
     private void Awake()

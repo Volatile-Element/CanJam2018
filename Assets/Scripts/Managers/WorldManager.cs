@@ -87,7 +87,7 @@ public class WorldManager : Singleton<WorldManager>
     {
         var enemies = GetShiPieces();
 
-        for (int i = 0; i < 4; i += 1)
+        for (int i = 0; i < GameManager.Instance.ShipPiecesToCollect; i += 1)
         {
             var chosenResource = GetResourceFromShipPieceWeights();
             var resourceToBeSpawned = enemies.FirstOrDefault(x => x.name == chosenResource);
